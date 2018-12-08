@@ -19,12 +19,13 @@ headsepline, % Uncomment to get a line under the header
 
 %\usepackage{mathpazo} % Use the Palatino font by default
 
-\usepackage[style=numeric,backend=bibtex,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
+\usepackage[style=numeric,sorting=none,backend=bibtex,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
 \bibliography{example.bib} % The filename of the bibliography
 
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 
+\usepackage{float}
 
 %----------------------------------------------------------------------------------------
 %	MARGIN SETTINGS
@@ -60,6 +61,7 @@ headsepline, % Uncomment to get a line under the header
 
 \AtBeginDocument{
 \hypersetup{linkcolor=black}
+\hypersetup{urlcolor=black}
 \hypersetup{citecolor=blue}
 \hypersetup{pdftitle=\ttitle} % Set the PDF's title to your title
 \hypersetup{pdfauthor=\authorname} % Set the PDF's author to your name

@@ -38,5 +38,56 @@ Cách thức hoạt động của MongoDB:
 Bên cạnh đó, MongoDB cũng tồn tại một số nhược điểm như tốn nhiều bộ nhớ RAM, khả năng bị mất dữ liệu trong trường hợp đột xuất như mất điện, do MongoDB không lưu dữ liệu về ổ cứng ngay lập tức... 
 
 Sau khi tìm hiểu, tổng kết lại các ưu và nhược điểm thì MongoDB là sự lựa chọn phù hợp để xây dựng cơ sở dữ liệu trong việc phát triển ứng dụng dự đoán giao thông.
+
 \section{Mô hình quan hệ thực thể}
-\section{Phân tích }
+Hệ thống gồm các thực thể chính:
+\begin{itemize}
+    \item Node
+    \item Segment
+    \item Cell
+    \item Street
+    \item Traffic Status
+\end{itemize}
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.0\textwidth]{Traffic_Report/images/erd.png}
+\caption{Mô hình quan hệ thực thể}\label{}
+\end{figure}
+
+\section{Phân tích thực thể}
+\textbf{node:} là một \textit{điểm} trên bản đồ được quy định sẵn bởi OpenStreetMap, gồm:
+\begin{itemize}
+    \item \lstinline{id:int}: định danh node.
+    \item \lstinline{coord (latitude:float, longtitude:float)}: toạ độ node, gồm vĩ độ và kinh độ.\\
+\end{itemize}
+
+\textbf{segment:} là đơn vị nhỏ nhất để đánh giá tình trạng giao thông. Mỗi segment là một đoạn nối 2 node đầu - cuối, gồm:
+\begin{itemize}
+    \item \lstinline{id:int}: định danh segment.
+    \item \lstinline{start_coord (latitude:float, longtitude:float)}: toạ độ gồm vĩ độ, kinh độ của node đầu.
+    \item \lstinline{end_coord (latitude:float, longtitude:float)}: toạ độ gồm vĩ độ, kinh độ của node cuối.
+    \item \lstinline{length:int}: chiều dài segment tính theo mét, có thể tính dựa vào toạ độ 2 node đầu - cuối\\
+\end{itemize}
+
+\textbf{cell:} được đưa ra để thuận tiện trong việc xác định các node, segment. Khi có toạ độ một đoạn đường có thể dựa vào cell để ánh xạ ra các segment thuộc đoạn đường đó. Mỗi cell là ô vuông có cạnh 100m, gồm:
+\begin{itemize}
+    \item \lstinline{coord_unit (xunit:int, yunit:int)}: chỉ số toạ độ của cell theo trục x và y. Gốc toạ độ O là một điểm được quy định trước.\\
+\end{itemize}
+
+\textbf{street:} mỗi street (con đường) chứa nhiều segment liên tiếp nhau, gồm:
+\begin{itemize}
+    \item \lstinline{id:int}: định danh street.
+    \item \lstinline{name:string}: tên street.
+    \item \lstinline{vmax(O):int}: tốc độ tối đa cho phép trên street đó tính theo km/h, có thể null.\\
+\end{itemize}
+
+\textbf{traffic\_status:} là tình trạng giao thông tại một segment vào một thời điểm. Vì vậy traffic\_status là một thực thể yếu của segment, gồm:
+\begin{itemize}
+    \item \lstinline{datetime:timestamp}: thời gian (ngày giờ) của tình trạng giao thông đó.
+    \item \lstinline{velocity:int}: tốc độ lưu thông.
+    \item \lstinline{accuracy:float}: sai số tốc độ.\\
+\end{itemize}
+
+Ngoài ra còn có \textbf{time\_frame:} là một bảng tham chiếu khung giờ được chia sẵn, có thể thay đổi mỗi frame là 10 hay 15 phút...\\
+
+Phạm vi của đề tài này là tập trung vào phân tích và dự đoán giao thông, nên phần chi tiết liên quan đến \lstinline{source} và \lstinline{traffic_report} (thuộc về crowdsourcing) nhóm không đề cập đến.

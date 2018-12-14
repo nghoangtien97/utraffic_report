@@ -25,7 +25,7 @@ Cách thức hoạt động của MongoDB:
     \item MongoDB hoạt động dưới một tiến trình ngầm service, với cổng mặc định là 27017 để lắng nghe các sự kiện gửi từ ứng dụng rồi tiến hành xử lý.
     \item Mỗi document (bản ghi) được định danh bằng trường \textit{\_id} có kiểu \textit{ObjectId}. Trường \textit{\_id} là duy nhất để phân biệt giữa các bản ghi với nhau và để phục vụ các truy vấn dữ liệu. Nó được tự động đánh chỉ mục (index) để tốc độ truy vấn thông tin đạt hiệu suất cao nhất \cite{MongoDB2}.
     \item Khi có truy vấn dữ liệu, bản ghi được ghi đệm lên bộ nhớ RA, nhờ vậy các lượt truy vấn sau có tốc độ xử lý cao hơn thay vì lại đọc trực tiếp từ ổ cứng.
-    \item Các truy vấn DML (thê, sửa, xoá) một bản ghi không được trực tiếp lưu ngay xuống ổ cứng, mà sau mỗi 60 giấy MongoDB mới tiến hành cập nhật toàn bộ dữ liệu thay đổi từ RAM xuống ổ cứng \cite{MongoDB3} nhằm đảm bảo hiệu suất của ứng dụng.
+    \item Các truy vấn DML (thêm, sửa, xoá) một bản ghi không được trực tiếp lưu ngay xuống ổ cứng, mà sau mỗi 60 giấy MongoDB mới tiến hành cập nhật toàn bộ dữ liệu thay đổi từ RAM xuống ổ cứng \cite{MongoDB3} nhằm đảm bảo hiệu suất của ứng dụng.
 \end{itemize}
 
 Ưu điểm khi sử dụng MongoDB:

@@ -4,5 +4,74 @@
 
 \label{Chapter6}
 \section{Tổng quan}
+Ở giai đoạn phát triển đề cương luận văn, nhóm nghiên cứu mới chỉ bước đầu xây dựng trang web hiển thị tình trạng giao thông từ dữ liệu lấy được qua các API của hệ thống Smart BK Traffic.
 \section{Ứng dụng web (Front-end)}
+Về phía Front-end, nhóm sử dụng OpenStreetMap API để tạo map cơ bản, đồng thời sử dụng thư viện Leaflet để hỗ trợ việc thêm các đường thẳng, điểm đánh dấu lên map để biểu diễn tình trạng giao thông.
+
+\begin{figure}[!ht]
+	\begin{center}
+		\includegraphics[width=1.0\textwidth]{Traffic_Report/images/map.png}
+	\end{center}
+	\caption{Web application thể hiện tình trạng giao thông}
+\end{figure}
+
+Khi người dùng truy cập vào địa chỉ web, browser sẽ thực hiện xác định tọa độ 4 góc của map đang hiển thị, gửi các tọa độ đó về cho server để thực hiện lấy dữ liệu và tạo các đoạn màu trên map dựa trên dữ liệu lấy được để biểu diễn tình trạng giao thông. Cụ thể, tùy theo trường vận tốc mà chúng ta có dãy màu để biễu diễn như sau:
+
+\begin{figure}[!ht]
+	\begin{center}
+		\includegraphics[width=0.5\textwidth]{Traffic_Report/images/color.png}
+	\end{center}
+	\caption{Dãy màu thể hiện tốc độ luồng giao thông}
+\end{figure}
+
+Cơ chế biểu diễn tốc độ luồng giao thông bằng dãy màu khá đơn giản, cụ thể như sau:
+\begin{itemize}
+    \item Với v < 0: hệ thống trả về màu #FF0000 (màu đỏ).
+    \item Với 0 < v < 10: hệ thống sẽ trả về dãy màu #FFxx00 (màu đỏ đến màu vàng), trong đó xx phụ thuộc vào vận tốc mà sẽ có giá trị chạy từ 00 đến FF.
+    \item Với 10 < v < 40: hệ thống sẽ trả về dãy màu #xxFF00 (màu vàng đến màu xanh lá cây), trong đó xx phụ thuộc vào vận tốc mà sẽ có giá trị chạy từ FF đến 00.
+    \item Với 40 < v < 60: hệ thống sẽ trả về dãy màu #00FFxx (màu xanh lá cây đến màu xanh dương nhạt), trong đó xx phụ thuộc vào vận tốc mà sẽ có giá trị chạy từ 00 đến FF.
+    \item Với x $\geq$ 60: hệ thống sẽ trả về màu xanh dương đậm.
+\end{itemize}
 \section{Server (Back-end)}
+Về phía server, nhóm cũng chỉ viết một số API để hỗ trợ việc lấy dữ liệu giao thông, cũng như tạo một chương trình nhỏ chạy song song để thực hiện get dữ liệu toàn thành phố lưu trữ vào database mongodb như đã trình bày ở phần 4.1.
+
+Dưới đây là danh sách một số API tạm thời mà nhóm đã viết:
+\begin{itemize}
+    \item \textbf{API @GET /api/all}
+    \begin{itemize}
+        \item Tên: getAll
+        \item Miêu tả: Lấy tất cả dữ liệu traffic status đã lưu vào mongodb
+        \item Input: Không
+        \item Output: JSON Object gồm danh sách các trạng thái giao thông đã lưu trong dữ liệu mongodb.
+    \end{itemize}
+    
+    \item \textbf{API @GET /api/get}
+    \begin{itemize}
+        \item Tên: getBKTraffic
+        \item Miêu tả: Lấy dữ liệu giao thông gián tiếp thông qua API của Smart BK Traffic. 
+        \item Input:
+        \begin{itemize}
+            \item @latTL: vĩ độ điểm góc trên cùng bên trái
+            \item @lonTL: kinh độ điểm góc trên cùng bên trái
+            \item @latTR: vĩ độ điểm góc trên cùng bên phải 
+            \item @lonTR: kinh độ điểm góc trên cùng bên phải
+            \item @latBL: vĩ độ điểm góc dưới cùng bên trái
+            \item @lonBL: kinh độ điểm góc dưới cùng bên trái
+            \item @latBR: vĩ độ điểm góc dưới cùng bên phải
+            \item @lonBR: kinh độ điểm góc dưới cùng bên phải 
+            \item @zoom: độ zoom của map
+        \end{itemize}
+        \item Output: JSON Object gồm danh sách các trạng thái giao thông được lấy từ API hệ thống Smart BK Traffic.
+    \end{itemize}
+    
+    \item \textbf{API @GET /api/update}
+    \begin{itemize}
+        \item Tên: updateBKTraffic
+        \item Miêu tả: Lấy dữ liệu giao thông bị thiếu khi sử dụng API /api/get
+        \item Input:
+        \begin{itemize}
+            \item @key: tham số dùng để lấy dữ liệu bị thiếu của hệ thống Smart BK Traffic.
+        \end{itemize}
+        \item Output: JSON Object gồm danh sách các trạng thái giao thông được lấy từ API hệ thống Smart BK Traffic.
+    \end{itemize}
+\end{itemize}

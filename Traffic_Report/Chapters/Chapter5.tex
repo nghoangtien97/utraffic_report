@@ -1,93 +1,35 @@
 % Chapter 5
 
-\chapter{Thiết kế cơ sở dữ liệu} % Main chapter title
+\chapter{Đánh giá và định hướng trong tương lai} % Main chapter title
 
 \label{Chapter5}
-Dữ liệu thu thập được từ Smart BK Traffic và crowdsourcing cần phải được lưu trữ để tiến hành mining và cung cấp cho người dùng. Do đó hệ cơ sở dữ liệu cần phải đáp ứng được các nhu cầu:
+\section{Đánh giá}
+\subsection{Kết quả đạt được}
+Nhóm đã tìm hiểu các đề tài liên quan, các nguồn dữ liệu như HERE Real-time Traffic, Google Maps, Smart BK Traffic, crowdsourcing...
+
+Nắm được cách thu thập dữ liệu thông qua API cung cấp từ Smart BK Trafic, liên kết với các đề tài liên quan để thu thập dữ liệu từ cộng đồng.
+
+Từ các dữ liệu đã thu thập được, tiến hành thiết kế cơ sở dữ liệu.
+
+Bước đầu xây dựng ứng dụng web với chức năng cơ bản là hiển thị tình trạng giao thông, thông qua việc tô màu tương ứng với tốc độ lưu thông trên bản đồ.
+
+\subsection{Hạn chế}
+Một số nguồn dữ liệu có độ tin cậy không cao. Bên cạnh đó Google Maps không cung cấp dữ liệu giao thông gây ra khó khăn trong khi thu thập dữ liệu.
+
+Do mới ở kỳ thực hiện đề cương luận văn, cũng như thiếu kinh phí nên web chỉ mới chạy trên localhost.
+
+Việc nghiên cứu cũng chỉ ở giai đoạn thu thập dữ liệu, chưa khai thác về Data Mining để thực hiện dự đoán dựa trên dữ liệu đã có.
+
+\subsection{Kết luận}
+Với sự phát triển phức tạp của giao thông ở thành phố Hồ Chí Minh, tình hình ùn tắc giao thông ngày càng trở nên nghiêm trọng. Việc thu thập, phân tích và dự đoán tình trạng giao thông vì vậy mà trở nên rất cần thiết.
+
+Qua giai đoạn đầu của quá trình nghiên cứu đề tài, nhóm đã thu được nhiều kết quả khả quan và một số hạn chế nhất định. Những kết quả đạt được và kinh nghiệm rút ra là bước chuẩn bị để thực hiện đề tài vào thời gian tới.
+
+\section{Định hướng trong tương lai}
+Ở giai đoạn tiếp theo, nhóm sẽ tiếp tục phát triển đề tài theo cá mục tiêu:
 \begin{itemize}
-    \item Khả năng lưu trữ lượng dữ liệu lớn.
-    \item Đáp ứng được nhu cầu lưu trữ từ nhiều nguồn thông tin khác nhau.
-    \item Truy xuất và xử lý nhanh chóng, chính xác.
+    \item Tiếp tục tìm hiểu và thu thập dữ liệu để có kết quả khách quan và chính xác hơn.
+    \item Nghiên cứu các kỹ thuật Data Mining để tối ưu hoá độ chính xác khi dự đoán.
+    \item Từ các dữ liệu đã thu thập được, thực hiện khai phá dữ liệu để dự đoán tình trạng giao thông, nhất là ở những đoạn đường chưa có dữ liệu trực tiếp.
+    \item Hoàn thiện ứng dụng web và xây dựng thêm một số chức năng hỗ trợ người dùng.
 \end{itemize}
-Dữ liệu thông thường được lưu trữ trên các hệ cơ sở dữ liệu NoSQL, mà cụ thể là MongoDB.
-
-\section{MongoDB}
-MongoDB là một cơ sở dữ liệu đa nền tảng, hoạt động dựa trên các khái niệm Collection và Document. Dữ liệu được lưu trữ dưới dạng các tài liệu JSON, cung cấp hiệu suất cao, khả năng truy xuất cao và mở rộng dễ dàng \cite{MongoDB1}.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.8\textwidth]{Traffic_Report/images/image02.png}
-\caption{Kiến trúc cơ sở dữ liệu MongoDB}\label{}
-\end{figure}
-
-Cách thức hoạt động của MongoDB:
-\begin{itemize}
-    \item MongoDB hoạt động dưới một tiến trình ngầm service, với cổng mặc định là 27017 để lắng nghe các sự kiện gửi từ ứng dụng rồi tiến hành xử lý.
-    \item Mỗi document (bản ghi) được định danh bằng trường \textit{\_id} có kiểu \textit{ObjectId}. Trường \textit{\_id} là duy nhất để phân biệt giữa các bản ghi với nhau và để phục vụ các truy vấn dữ liệu. Nó được tự động đánh chỉ mục (index) để tốc độ truy vấn thông tin đạt hiệu suất cao nhất \cite{MongoDB2}.
-    \item Khi có truy vấn dữ liệu, bản ghi được ghi đệm lên bộ nhớ RA, nhờ vậy các lượt truy vấn sau có tốc độ xử lý cao hơn thay vì lại đọc trực tiếp từ ổ cứng.
-    \item Các truy vấn DML (thê, sửa, xoá) một bản ghi không được trực tiếp lưu ngay xuống ổ cứng, mà sau mỗi 60 giấy MongoDB mới tiến hành cập nhật toàn bộ dữ liệu thay đổi từ RAM xuống ổ cứng \cite{MongoDB3} nhằm đảm bảo hiệu suất của ứng dụng.
-\end{itemize}
-
-Ưu điểm khi sử dụng MongoDB:
-\begin{itemize}
-    \item MongoDB lưu trữ dữ liệu dưới dạng JSON nên dễ quản lý. Dữ liệu được mô tả tường minh, cấu trúc lại linh hoạt, dễ sử dụng cả về phía con người.
-    \item Khả năng mở rộng lớn mà không cần lo lắng về các ràng buộc khoá chính, khoá ngoại...
-    \item Dữ liệu khi truy vấn được lưu trữ trên RAM nên nâng cao tốc độ và hiệu suất của ứng dụng, nhất là đối với ứng dụng về giao thông cần lưu trữ và xử lý lượng dữ liệu rất lớn.
-\end{itemize}
-
-Bên cạnh đó, MongoDB cũng tồn tại một số nhược điểm như tốn nhiều bộ nhớ RAM, khả năng bị mất dữ liệu trong trường hợp đột xuất như mất điện, do MongoDB không lưu dữ liệu về ổ cứng ngay lập tức... 
-
-Sau khi tìm hiểu, tổng kết lại các ưu và nhược điểm thì MongoDB là sự lựa chọn phù hợp để xây dựng cơ sở dữ liệu trong việc phát triển ứng dụng dự đoán giao thông.
-
-\section{Mô hình quan hệ thực thể}
-Hệ thống gồm các thực thể chính:
-\begin{itemize}
-    \item Node
-    \item Segment
-    \item Cell
-    \item Street
-    \item Traffic Status
-\end{itemize}
-\begin{figure}[H]
-\centering
-\includegraphics[width=1.0\textwidth]{Traffic_Report/images/erd.png}
-\caption{Mô hình quan hệ thực thể}\label{}
-\end{figure}
-
-\section{Phân tích thực thể}
-\textbf{node:} là một \textit{điểm} trên bản đồ được quy định sẵn bởi OpenStreetMap, gồm:
-\begin{itemize}
-    \item \lstinline{id:int}: định danh node.
-    \item \lstinline{coord (latitude:float, longtitude:float)}: toạ độ node, gồm vĩ độ và kinh độ.\\
-\end{itemize}
-
-\textbf{segment:} là đơn vị nhỏ nhất để đánh giá tình trạng giao thông. Mỗi segment là một đoạn nối 2 node đầu - cuối, gồm:
-\begin{itemize}
-    \item \lstinline{id:int}: định danh segment.
-    \item \lstinline{start_coord (latitude:float, longtitude:float)}: toạ độ gồm vĩ độ, kinh độ của node đầu.
-    \item \lstinline{end_coord (latitude:float, longtitude:float)}: toạ độ gồm vĩ độ, kinh độ của node cuối.
-    \item \lstinline{length:int}: chiều dài segment tính theo mét, có thể tính dựa vào toạ độ 2 node đầu - cuối\\
-\end{itemize}
-
-\textbf{cell:} được đưa ra để thuận tiện trong việc xác định các node, segment. Khi có toạ độ một đoạn đường có thể dựa vào cell để ánh xạ ra các segment thuộc đoạn đường đó. Mỗi cell là ô vuông có cạnh 100m, gồm:
-\begin{itemize}
-    \item \lstinline{coord_unit (xunit:int, yunit:int)}: chỉ số toạ độ của cell theo trục x và y. Gốc toạ độ O là một điểm được quy định trước.\\
-\end{itemize}
-
-\textbf{street:} mỗi street (con đường) chứa nhiều segment liên tiếp nhau, gồm:
-\begin{itemize}
-    \item \lstinline{id:int}: định danh street.
-    \item \lstinline{name:string}: tên street.
-    \item \lstinline{vmax(O):int}: tốc độ tối đa cho phép trên street đó tính theo km/h, có thể null.\\
-\end{itemize}
-
-\textbf{traffic\_status:} là tình trạng giao thông tại một segment vào một thời điểm. Vì vậy traffic\_status là một thực thể yếu của segment, gồm:
-\begin{itemize}
-    \item \lstinline{datetime:timestamp}: thời gian (ngày giờ) của tình trạng giao thông đó.
-    \item \lstinline{velocity:int}: tốc độ lưu thông.
-    \item \lstinline{accuracy:float}: sai số tốc độ.\\
-\end{itemize}
-
-Ngoài ra còn có \textbf{time\_frame:} là một bảng tham chiếu khung giờ được chia sẵn, có thể thay đổi mỗi frame là 10 hay 15 phút...\\
-
-Phạm vi của đề tài này là tập trung vào phân tích và dự đoán giao thông, nên phần chi tiết liên quan đến \lstinline{source} và \lstinline{traffic_report} (thuộc về crowdsourcing) nhóm không đề cập đến.
